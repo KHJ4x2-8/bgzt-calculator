@@ -82,7 +82,7 @@
       document.getElementById("payoutResult").textContent = "판매 금액을 정확히 입력하세요.";
       return;
     }
-    const payout = price * 0.965;
+    const payout = price * 0.94;
     const resultText = `받을 금액: ${payout.toLocaleString()}원`;
     document.getElementById("payoutResult").textContent = resultText;
     updateHistory(`💰 판매금액 ${price.toLocaleString()}원 → ${resultText}`);
@@ -94,7 +94,7 @@
       document.getElementById("requiredResult").textContent = "금액을 정확히 입력하세요.";
       return;
     }
-    const requiredPrice = desired / 0.965;
+    const requiredPrice = desired / 0.94;
     const resultText = `판매해야 할 금액: ${requiredPrice.toLocaleString(undefined, { maximumFractionDigits: 0 })}원`;
     document.getElementById("requiredResult").textContent = resultText;
     updateHistory(`📦 원하는 금액 ${desired.toLocaleString()}원 → ${resultText}`);
