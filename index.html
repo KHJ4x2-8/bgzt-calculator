@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>번개장터 수수료 계산기</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="TT.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>⚡ 번개장터 수수료 계산기 🔧</h1>
+
+    <div class="calculator-box">
+      <h2>1️⃣ 판매 금액 → 받을 금액</h2>
+      <div class="row">
+        <label for="sellPrice">판매 금액(원):</label>
+        <input type="number" id="sellPrice" placeholder="예: 100000" min="0" />
+        <button id="calcPayoutBtn" type="button">계산</button>
+      </div>
+      <p id="payoutResult"></p>
+    </div>
+
+    <div class="calculator-box">
+      <h2>2️⃣ 받고 싶은 금액 → 판매 금액</h2>
+      <div class="row">
+        <label for="desiredAmount">받고 싶은 금액(원):</label>
+        <input type="number" id="desiredAmount" placeholder="예: 96500" min="0" />
+        <button id="calcRequiredBtn" type="button">계산</button>
+      </div>
+      <p id="requiredResult"></p>
+    </div>
+<div class="history-box">
+  <h3>
+    📝 최근 계산 기록
+    <small class="note">*마지막 다섯 개까지 보입니다.</small>
+  </h3>
+  <ul id="historyList"></ul>
+</div>
+</div>
+
+
+
+
+<script>
+  let history = [];
+
+  function updateHistory(text) {
+    history.unshift(text);
+    if (history.length > 5) history.pop();
+
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const list = document.getElementById("historyList");
+    list.innerHTML = "";
+
+    history.forEach((item, index) => {
+      const li = document.createElement("li");
+
+      const span = document.createElement("span");
+      span.textContent = item;
+
+      const btn = document.createElement("button");
+      btn.textContent = "✕";
+      btn.className = "delete-btn";
+      btn.onclick = () => {
+        history.splice(index, 1);
+        renderHistory();
+      };
+
+      li.appendChild(span);
+      li.appendChild(btn);
+      list.appendChild(li);
+    });
+  }
+
+  function calcPayout() {
+    const price = parseFloat(document.getElementById("sellPrice").value);
+    if (isNaN(price)) {
+      document.getElementById("payoutResult").textContent = "판매 금액을 정확히 입력하세요.";
+      return;
+    }
+    const payout = price * 0.94;
+    const resultText = `받을 금액: ${payout.toLocaleString()}원`;
+    document.getElementById("payoutResult").textContent = resultText;
+    updateHistory(`💰 판매금액 ${price.toLocaleString()}원 → ${resultText}`);
+  }
+
+  function calcRequiredPrice() {
+    const desired = parseFloat(document.getElementById("desiredAmount").value);
+    if (isNaN(desired)) {
+      document.getElementById("requiredResult").textContent = "금액을 정확히 입력하세요.";
+      return;
+    }
+    const requiredPrice = desired / 0.94;
+    const resultText = `판매해야 할 금액: ${requiredPrice.toLocaleString(undefined, { maximumFractionDigits: 0 })}원`;
+    document.getElementById("requiredResult").textContent = resultText;
+    updateHistory(`📦 원하는 금액 ${desired.toLocaleString()}원 → ${resultText}`);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("sellPrice").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") calcPayout();
+    });
+
+    document.getElementById("desiredAmount").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") calcRequiredPrice();
+    });
+  });
+</script>
+
+</body>
+</html>
